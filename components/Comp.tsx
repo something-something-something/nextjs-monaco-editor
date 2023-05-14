@@ -3,7 +3,29 @@ import { useState } from 'react';
 import Editor from './Editor';
 
 export default function Comp() {
-	const [state, setState] = useState('{}');
+	const [state, setState] = useState(
+		JSON.stringify(
+			{
+				mainConfig: [
+					{
+						id: 'a',
+					},
+				],
+				altConfigs: [
+					{
+						cid: 'd',
+						config: [
+							{
+								id: 'd',
+							},
+						],
+					},
+				],
+			},
+			null,
+			'\t'
+		)
+	);
 	return (
 		<>
 			asdaslk

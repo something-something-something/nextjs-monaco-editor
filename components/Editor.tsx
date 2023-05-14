@@ -48,58 +48,96 @@ self.MonacoEnvironment = {
 export default function Editor({
 	value,
 	onChange,
-	//language
-}: {
+}: //language
+{
 	value: string;
 	onChange: (value: string) => void;
 	//language?:string
 }) {
 	const edElem = useRef<HTMLDivElement>(null);
 
+	monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
+		validate: true,
+		schemaValidation: 'error',
+		schemas: [
+			{
+				uri: '',
+				fileMatch: ['it://testschema/a'],
 
-
-monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
-	validate:true,
-	schemas:[
-		{
-			uri:'',
-			fileMatch:['it://testschema/a'],
-			schema:{
-				type:"object",
-				properties:{
-					test:{
-						type:"string"
+				schema: {
+					type: 'object',
+					properties: {
+						test: {
+							type: 'string',
+						},
+						c: {
+							type: 'number',
+						},
+						mainConfig: {
+							type: 'array',
+							items: {
+								type: 'object',
+								properties: {
+									id: {
+										type: 'string',
+									},
+								},
+							},
+						},
+						altConfigs: {
+							type: 'array',
+							items: {
+								type: 'object',
+								properties: {
+									cid: {
+										type: 'string',
+									},
+									config: {
+										title: 'somethingTitle',
+										description: 'somethingDescription',
+										type: 'array',
+										items: {
+											type: 'object',
+											properties: {
+												id: {
+													type: 'string',
+													format: 'uuid',
+												},
+											},
+										},
+									},
+								},
+							},
+						},
 					},
-					"c":{
-						type:"number"
-					}
-				}
-			}
-			
-
-
-		}
-	]
-})
-
+					required: ['altConfigs', 'mainConfig', 'c'],
+					additionalProperties: false,
+				},
+			},
+		],
+	});
 
 	const monacoEditor = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
 	useEffect(() => {
 		if (edElem.current !== null) {
 			if (monacoEditor.current === null) {
 				const ed = monaco.editor.create(edElem.current, {
-					
-					insertSpaces:false,
-					theme:'vs-dark',
-					model:monaco.editor.createModel(value,'json', monaco.Uri.parse('it://testschema/a'))
-				}); 
+					insertSpaces: false,
+					theme: 'vs-dark',
+					automaticLayout: true,
+					model: monaco.editor.createModel(
+						'',
+						'json',
+						monaco.Uri.parse('it://testschema/a')
+					),
+				});
 				const model = ed.getModel();
-				
+
 				monacoEditor.current = ed;
 				return () => {
 					ed.dispose();
 				};
-			} 
+			}
 		}
 	}, [edElem]);
 
@@ -114,18 +152,15 @@ monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
 		}
 	}, [onChange, monacoEditor]);
 
-
-
 	useEffect(() => {
-
-
 		if (monacoEditor.current !== null) {
 			const model = monacoEditor.current.getModel();
 			if (model !== null) {
 				//const pos=monacoEditor.current.getPosition();
 
-
-				monacoEditor.current.executeEdits('react',[{text:value,range:model.getFullModelRange()}])
+				monacoEditor.current.executeEdits('react', [
+					{ text: value, range: model.getFullModelRange() },
+				]);
 				//model.setValue(value);
 				//monacoEditor.current.setPosition(pos);
 			}
