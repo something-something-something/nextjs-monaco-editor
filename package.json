@@ -1,0 +1,31 @@
+{
+	"name": "monaco-test",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"dev": "next dev",
+		"build": "next build",
+		"start": "next start",
+		"lint": "next lint",
+		"fmt:check": "prettier --check .",
+		"fmt": "prettier --write ."
+	},
+	"author": "",
+	"license": "UNLICENSED",
+	"dependencies": {
+		"monaco-editor": "^0.38.0",
+		"next": "^13.4.2",
+		"react": "^18.2.0",
+		"react-dom": "^18.2.0"
+	},
+	"devDependencies": {
+		"@types/node": "20.1.4",
+		"@types/react": "18.2.6",
+		"eslint": "8.40.0",
+		"eslint-config-next": "13.4.2",
+		"prettier": "2.8.8",
+		"typescript": "5.0.4"
+	}
+}
